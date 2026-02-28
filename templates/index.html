@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Timer</title>
+</head>
+<body>
+    <h1>Erinnerungs-Timer</h1>
+
+    <input type="number" id="minuten" placeholder="Minuten bis du los musst">
+    <button onclick="startTimer()">Start</button>
+
+    <p id="status"></p>
+
+    <script src="https://cdn.socket.io/4.6.0/socket.io.min.js"></script>
+    <script>
+        const socket = io();
+
+        function startTimer() {
+            const minuten = document.getElementById("minuten").value;
+            socket.emit("start_timer", {minuten: minuten});
+            document.getElementById("status").innerText = "Timer läuft...";
+        }
+
+        socket.on("erinnerung", function(data) {
+            document.getElementById("status").innerText = data.nachricht;
+            speak(data.nachricht);
+        });
+
+        function speak(text) {
+            const msg = new SpeechSynthesisUtterance(text);
+            msg.lang = "de-DE";
+            window.speechSynthesis.speak(msg);
+        }
+    </script>
+</body>
+</html>
