@@ -11,6 +11,7 @@
     <section>Geb einfach ein wie viel Zeit du noch hast und ich erinnere dich.</section>
     <input type="number" id="minuten" placeholder="Minuten bis du los musst">
     <button onclick="startTimer()">Start</button>
+    <button onclick="stopTimer()">Abbrechen</button>
 
     <p id="status"></p>
 
@@ -22,6 +23,12 @@
             const minuten = document.getElementById("minuten").value;
             socket.emit("start_timer", {minuten: minuten});
             document.getElementById("status").innerText = "Timer läuft...";
+        }
+
+        function stopTimer() {
+            socket.emit("stop_timer");
+            document.getElementById("status").innerText = "";
+            document.getElementById("minuten").value = "";
         }
 
         socket.on("erinnerung", function(data) {

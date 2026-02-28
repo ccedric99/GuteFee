@@ -15,11 +15,18 @@ def minütliche_erinnerungen(e):
         else:
             socketio.emit("erinnerung", {"nachricht": "Zeit ist um, du musst raus!"})
 
+timer_laeuft = False
+
 def timer_logik(ges_dauer_min):
     t0 = ges_dauer_min * 60
     x = t0
+    socketio.emit
 
     delta1 = round(t0 - (t0 * 0.75))
+
+    if not timer_laeuft:
+        return
+
     time.sleep(delta1)
     a = x - delta1
     socketio.emit("erinnerung", {"nachricht": f"Noch {int(t0*0.75 // 60)} Minuten übrig"})
@@ -29,6 +36,10 @@ def timer_logik(ges_dauer_min):
         return
 
     delta2 = round((a) - (a * 0.666))
+
+    if not timer_laeuft:
+        return
+
     time.sleep(delta2)
     b = a - delta2
     socketio.emit("erinnerung", {"nachricht": f"Noch {int(b // 60)} Minuten übrig"})
@@ -38,6 +49,10 @@ def timer_logik(ges_dauer_min):
         return
 
     delta3 = round(b - (b * 0.666))
+
+    if not timer_laeuft:
+        return
+
     time.sleep(delta3)
     c = b - delta3
     socketio.emit("erinnerung", {"nachricht": f"Noch {int(c // 60)} Minuten übrig"})
@@ -47,6 +62,10 @@ def timer_logik(ges_dauer_min):
         return
 
     delta4 = round(c - (c * 0.75))
+
+    if not timer_laeuft:
+        return
+
     time.sleep(delta4)
     d = c - delta4
     socketio.emit("erinnerung", {"nachricht": f"Noch {int(d // 60)} Minuten übrig"})
@@ -56,6 +75,10 @@ def timer_logik(ges_dauer_min):
         return
 
     delta5 = round(d - (d * 0.666))
+
+    if not timer_laeuft:
+        return
+
     time.sleep(delta5)
     e = round(d - delta5)
     socketio.emit("erinnerung", {"nachricht": f"Noch {int(e // 60)} Minuten übrig"})
@@ -75,6 +98,11 @@ def timer_logik(ges_dauer_min):
             socketio.emit("erinnerung", {"nachricht": f"Noch {int(e // 60)} Minuten übrig"})
         else:
             socketio.emit("erinnerung", {"nachricht": "Zeit ist um, du musst raus!"})
+
+@socketio.on("stop_timer")
+def handle_stop():
+    global timer_laeuft
+    timer_laeuft = False
 
 @socketio.on("start_timer")
 def handle_start(data):
